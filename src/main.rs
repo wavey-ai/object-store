@@ -21,6 +21,10 @@ struct Command {
     s3_secret_access_key: String,
     #[structopt(long, env = "S3_HOST", default_value = "https://minio.wavey.io:9000")]
     s3_host: String,
+    #[structopt(long, env = "S3_UPLOADS_BUCKET")]
+    s3_uploads_bucket: String,
+    #[structopt(long, env = "S3_BUCKET_PREFIX")]
+    s3_bucket_prefix: String,
     #[structopt(long, env = "OIDC_AUDIENCE")]
     oidc_audience: String,
     #[structopt(long, env = "OIDC_CLIENT_ID")]
@@ -50,6 +54,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let s3_key = args.s3_access_key_id;
     let s3_secret = args.s3_secret_access_key;
     let s3_host = args.s3_host;
+    let s3_uploads_bucket = args.s3_uploads_bucket;
+    let s3_bucket_prefix = args.s3_bucket_prefix;
 
     let signing_cert: Vec<u8> = fs::read(format!("{}/{}", ssl_path, "auth0.pem")).unwrap();
 
@@ -65,7 +71,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let shutdown_idp = idp_server.start().await?;
 
     let storage_client = Storage::new(s3_host, s3_key, s3_secret, 1024 * 256);
-    let object_api = ObjectApi::new(ssl_path.clone(), 8004, 8003, storage_client.clone());
+    let object_api = ObjectApi::new(
+        ssl_path.clone(),
+        8004,
+        8003,
+        storage_client.clone(),
+        s3_bucket_prefix,
+    );
     let shutdown_object_api = object_api.start().await?;
 
     let (tx, rx) = oneshot::channel();

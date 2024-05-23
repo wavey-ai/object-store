@@ -1818,7 +1818,7 @@ dependencies = [
 [[package]]
 name = "object-api"
 version = "0.1.0"
-source = "git+https://github.com/wavey-ai/object-api#4e3512188cd64e4c58182c7e76a0b39195b84b7b"
+source = "git+https://github.com/wavey-ai/object-api#a6bbef6eb853f30ffc5e4950935222add59e7cd9"
 dependencies = [
  "anyhow",
  "base64 0.22.1",
