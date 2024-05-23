@@ -1,0 +1,14 @@
+[package]
+name = "object-store"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+env_logger = "0.11.3"
+hyper-idp = { git = "https://github.com/wavey-ai/hyper-idp" }
+object-api = { git = "https://github.com/wavey-ai/object-api" }
+storage = { git = "https://github.com/wavey-ai/storage.git" }
+structopt = "0.3.26"
+tokio = { version = "1.37.0", features = ["sync"] }
+tracing = "0.1.40"
+tracing-subscriber = { features = ["env-filter", "json"] }
